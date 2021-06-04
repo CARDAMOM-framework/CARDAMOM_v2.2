@@ -1,0 +1,18 @@
+
+to find memory leak:
+gcc CARDAMOM_RUN_MODEL.c -lm -g
+
+valgrind --leak-check=full --track-origins=yes ./a.out /Users/abloom/tempcardametfile.bin /Users/abloom/tempcardaparfile.bin
+
+to profile speed
+
+gcc CARDAMOM_RUN_MODEL.c -lm -g
+
+valgrind --tool=callgrind ./a.out /Users/abloom/tempcardametfile.bin /Users/abloom/tempcardaparfile.bin
+
+(example with specific model run)
+valgrind --tool=callgrind ./a.out /Users/abloom/CARDAMOM_DISK/CBF_FILES/GCRUN_OCT17/GCRUN_OCT17_1_1472.cbf /Users/abloom/CARDAMOM_DISK/CBR_FILES/GCRUN_OCT17/GCRUN_OCT17_1_1472_1.cbr
+
+to debug:
+gcc -g CARDAMOM_
+run /Users/abloom/tempcardametfile.bin /Users/abloom/tempcardaparfile.bin

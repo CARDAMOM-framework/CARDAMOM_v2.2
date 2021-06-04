@@ -1,0 +1,98 @@
+#pragma once
+
+int INITIALIZE_PARAMETER_FIELDS(DATA *DATA){
+/*initializing parmin and parmax fields*/
+DATA->parmin=NULL;
+DATA->parmax=NULL;
+DATA->parname=NULL;
+DATA->parmin=calloc(DATA->nopars,sizeof(double));
+DATA->parmax=calloc(DATA->nopars,sizeof(double));
+DATA->parname=calloc(DATA->nopars,sizeof(char *));
+return 0;}
+
+#include "ADD_PARAMETER_TO_STACK.c"
+#include "WRITE_MODEL_STACKS_TO_FILE.c"
+/*Including all model PARS_INFO_MMMM (model) files*/
+#include "../CARDAMOM_MODELS/DALEC/DALEC_101/MODEL_INFO_101.c"
+#include "../CARDAMOM_MODELS/DALEC/DALEC_400/MODEL_INFO_400.c"
+//#include "../CARDAMOM_MODELS/DALEC/DALEC_803/MODEL_INFO_803.c"
+//#include "../CARDAMOM_MODELS/DALEC/DALEC_804/MODEL_INFO_804.c"
+//#include "../CARDAMOM_MODELS/DALEC/DALEC_805/MODEL_INFO_805.c"
+//#include "../CARDAMOM_MODELS/DALEC/DALEC_806/MODEL_INFO_806.c"
+//#include "../CARDAMOM_MODELS/DALEC/DALEC_807/MODEL_INFO_807.c"
+//#include "../CARDAMOM_MODELS/DALEC/DALEC_808/MODEL_INFO_808.c"
+#include "../CARDAMOM_MODELS/DALEC/DALEC_809/MODEL_INFO_809.c"
+#include "../CARDAMOM_MODELS/DALEC/DALEC_811/MODEL_INFO_811.c"
+//#include "../CARDAMOM_MODELS/DALEC/DALEC_812/MODEL_INFO_812.c"
+#include "../CARDAMOM_MODELS/DALEC/DALEC_813/MODEL_INFO_813.c"
+//#include "../CARDAMOM_MODELS/DALEC/DALEC_810/MODEL_INFO_810.c"
+//#include "../CARDAMOM_MODELS/DALEC/DALEC_820/MODEL_INFO_820.c"
+//#include "../CARDAMOM_MODELS/DALEC/DALEC_821/MODEL_INFO_821.c"
+//#include "../CARDAMOM_MODELS/DALEC/DALEC_830/MODEL_INFO_830.c"
+#include "../CARDAMOM_MODELS/DALEC/DALEC_831/MODEL_INFO_831.c"
+//#include "../CARDAMOM_MODELS/DALEC/DALEC_840/MODEL_INFO_840.c"
+//#include "../CARDAMOM_MODELS/DALEC/DALEC_1200/MODEL_INFO_1200.c"
+#include "../CARDAMOM_MODELS/DALEC/DALEC_1000/MODEL_INFO_1000.c"
+//#include "../CARDAMOM_MODELS/DALEC/DALEC_1001/MODEL_INFO_1001.c"
+//#include "../CARDAMOM_MODELS/DALEC/DALEC_1002/MODEL_INFO_1002.c"
+#include "../CARDAMOM_MODELS/DALEC/DALEC_1003/MODEL_INFO_1003.c"
+//#include "../CARDAMOM_MODELS/DALEC/DALEC_1004/MODEL_INFO_1004.c"
+#include "../CARDAMOM_MODELS/DALEC/DALEC_1005/MODEL_INFO_1005.c"
+//#include "../CARDAMOM_MODELS/DALEC/DALEC_1009/MODEL_INFO_1009.c"
+//#include "../CARDAMOM_MODELS/DALEC/DALEC_1010/MODEL_INFO_1010.c"
+//#include "../CARDAMOM_MODELS/DALEC/DALEC_1011/MODEL_INFO_1011.c"
+//#include "../CARDAMOM_MODELS/DALEC/DALEC_1030/MODEL_INFO_1030.c"
+//#include "../CARDAMOM_MODELS/DALEC/DALEC_1031/MODEL_INFO_1031.c"
+//#include "../CARDAMOM_MODELS/DALEC/DALEC_1032/MODEL_INFO_1032.c"
+//#include "../CARDAMOM_MODELS/DALEC/DALEC_1040/MODEL_INFO_1040.c"
+
+/*This function attributes model specific variables based
+ * on the ID number stored in DATA->ID*/
+/*General note: The code IDxMA (where x is the model ID) is kept above the model attribute
+line. The reason for this is to ensure that Matlab can easily access this code*/
+
+
+
+int CARDAMOM_MODEL_LIBRARY(DATA *DATA){
+
+
+int status=0;
+if (DATA->ID==101  ){MODEL_INFO_101(DATA);}
+else if (DATA->ID==400  ){MODEL_INFO_400(DATA);}
+//else if (DATA->ID==803  ){MODEL_INFO_803(DATA);}
+//else if (DATA->ID==804  ){MODEL_INFO_804(DATA);}
+//else if (DATA->ID==805  ){MODEL_INFO_805(DATA);}
+//else if (DATA->ID==806  ){MODEL_INFO_806(DATA);}
+//else if (DATA->ID==807  ){MODEL_INFO_807(DATA);}
+//else if (DATA->ID==808  ){MODEL_INFO_808(DATA);}
+else if (DATA->ID==809  ){MODEL_INFO_809(DATA);}
+//else if (DATA->ID==810  ){MODEL_INFO_810(DATA);}
+else if (DATA->ID==811  ){MODEL_INFO_811(DATA);}
+//else if (DATA->ID==812  ){MODEL_INFO_812(DATA);}
+else if (DATA->ID==813  ){MODEL_INFO_813(DATA);}
+//else if (DATA->ID==820  ){MODEL_INFO_820(DATA);}
+//else if (DATA->ID==821  ){MODEL_INFO_821(DATA);}
+//else if (DATA->ID==830  ){MODEL_INFO_830(DATA);}
+else if (DATA->ID==831  ){MODEL_INFO_831(DATA);}
+//else if (DATA->ID==840  ){MODEL_INFO_840(DATA);}
+else if (DATA->ID==1000  ){MODEL_INFO_1000(DATA);}
+//else if (DATA->ID==1001  ){MODEL_INFO_1001(DATA);}
+//else if (DATA->ID==1002  ){MODEL_INFO_1002(DATA);}
+else if (DATA->ID==1003  ){MODEL_INFO_1003(DATA);}
+//else if (DATA->ID==1004  ){MODEL_INFO_1004(DATA);}
+else if (DATA->ID==1005  ){MODEL_INFO_1005(DATA);}
+//else if (DATA->ID==1009  ){MODEL_INFO_1009(DATA);}
+//else if (DATA->ID==1030  ){MODEL_INFO_1030(DATA);}
+//else if (DATA->ID==1031  ){MODEL_INFO_1031(DATA);}
+//else if (DATA->ID==1032  ){MODEL_INFO_1032(DATA);}
+//else if (DATA->ID==1040  ){MODEL_INFO_1040(DATA);}
+//else if (DATA->ID==1010  ){MODEL_INFO_1010(DATA);}
+//else if (DATA->ID==1011  ){MODEL_INFO_1011(DATA);}
+//else if (DATA->ID==1200  ){MODEL_INFO_1200(DATA);}
+else {status=1;}
+
+
+
+return status;}
+
+

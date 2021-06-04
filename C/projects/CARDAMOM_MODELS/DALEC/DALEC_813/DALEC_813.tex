@@ -1,0 +1,203 @@
+\documentclass{article}
+
+\usepackage{amsmath,amssymb,mathtools,physics,enumerate,placeins,xcolor,makecell,longtable}
+\usepackage[margin=0.75in]{geometry}
+
+\title{CARDAMOM DALEC Model ID 813}
+
+\begin{document}
+	\maketitle
+
+	\section{Mathematical Dynamics}
+
+		Let $\vec{C}^{(t)} = \qty[C_\text{lab}^{(t)}, C_\text{fol}^{(t)}, C_\text{roo}^{(t)}, C_\text{woo}^{(t)}, C_\text{lit}^{(t)}, C_\text{som}^{(t)}]$ denote the labile (lab), foliar (fol), fine root (roo), wood (woo), litter (lit), and soil organic matter (SOM) carbon pools on day $t$.  The dynamics are given by
+		\begin{align*}
+			\vec{C}^{(t+1)} &= \text{DALEC}_{813}\qty(\vec{C}^{(t)})\\
+			&= \text{DALEC}_{813}^\text{fire}\qty(\text{DALEC}_{813}^\text{pre-fire}\qty(\vec{C}^{(t)})),
+		\end{align*}
+		where $\text{DALEC}_{813}^\text{pre-fire}(\cdot)$ denotes Carbon dynamics in the absence of fire and $\text{DALEC}_{813}^\text{fire}(\cdot)$ denotes Carbon Carbon dynamics due to fires.
+
+		\subsection{Pre-fire Dynamics}
+			Denote $\qty[C_\text{lab}^{(t+1)'}, C_\text{fol}^{(t+1)'}, C_\text{roo}^{(t+1)'}, C_\text{woo}^{(t+1)'}, C_\text{lit}^{(t+1)'}, C_\text{som}^{(t+1)'}] = \vec{C}^{(t+1)'} = \text{DALEC}_{813}^\text{pre-fire}(\vec{C}^{(t)})$.  The pre-fire dynamics are given by
+			\begin{align}
+				C_\text{lab}^{(t+1)'} &= f_\text{lab} F_\text{gpp}^{(t)} + \left(1 - \phi_\text{onset}^{(t)}\right)C_\text{lab}^{(t)}, \\
+				C_\text{fol}^{(t+1)'} &= \phi_\text{onset}^{(t)}C_\text{lab}^{(t)} + \left(1 - \phi_\text{fall}^{(t)}\right)C_\text{fol}^{(t)} + f_\text{fol} F_\text{gpp}^{(t)}, \\
+				C_\text{roo}^{(t+1)'} &= (1 - \theta_\text{roo})C_\text{roo}^{(t)} + f_\text{roo} F_\text{gpp}^{(t)}, \\
+				C_\text{woo}^{(t+1)'} &= (1 - \theta_\text{woo})C_\text{woo}^{(t)} + f_\text{woo} F_\text{gpp}^{(t)}, \\
+				C_\text{lit}^{(t+1)'} &= \left(1 - \left(\theta_\text{lit} + \theta_\text{min}\right)\rho^{(t)}\right)C_\text{lit}^{(t)} + \phi_\text{fall}^{(t)}C_\text{fol}^{(t)} + \theta_\text{roo}C_\text{roo}^{(t)}, \\
+				C_\text{som}^{(t+1)'} &= \left(1 - \theta_\text{som}\rho^{(t)}\right)C_\text{som}^{(t)} + \theta_\text{woo}C_\text{woo}^{(t)} + \theta_\text{min}\rho^{(t)}C_\text{lit}^{(t)}.
+			\end{align}
+			Here $F_\text{gpp}^{(t)}$ denotes the gross primary production (GPP) of Carbon on day $t$ and is a function of meteorology and atmospheric vapor pressure:
+			\begin{align}
+				F_\text{gpp}^{(t)} = F_\text{gpp(max)}^{(t)}\times\min\qty(1, \frac{W^{(t)}}{\omega}),
+			\end{align}
+			where $\omega$ is the water stress threshold, $F_\text{gpp(max)}^{(t)}$ denotes the maximum GPP on day $t$, which is given by the Aggregated Canopy Model (ACM), described {\color{red}in another document}, and $W^{(t)}$ is the plant-available water pool on day $t$.  $W^{(t)}$ is given dynamically:
+			\begin{align}
+				W^{(t+1)} &= W^{(t)} + P^{(t)} - R^{(t)} - ET^{(t)},
+			\end{align}
+			where $P^{(t)}$, $R^{(t)}$, and $ET^{(t)}$ are the precipitation, runoff, and evapotranspiration on day $t$, respectively.  Evapotranspiration and runoff are given by
+			\begin{align}
+				ET^{(t)} &= F_\text{gpp}^{(t)}\frac{VPD^{(t)}}{v_e},\\
+				R^{(t)} &= \begin{cases}
+					\alpha \qty(W^{(t)})^2 & \text{if } W^{(t)} \leq \frac{1}{2\alpha},\\
+					W^{(t)} - \frac{1}{2\alpha} & \text{if } W^{(t)} > \frac{1}{2\alpha},
+					\end{cases}
+			\end{align}
+			where $v_e$ is the inherent water-use efficiency, $\alpha$ is a runoff decay constant, and $VPD^{(t)}$ is the vapor pressure defincit on day $t$.
+
+			$\theta_\text{roo}$ and $\theta_\text{woo}$ are the fine root and stem C turnover rates, respectively.  $\theta_\text{lit} \rho^{(t)}$ and $\theta_\text{som} \rho^{(t)}$ are the litter and SOM C turnover rates, respectively, and $\theta_\text{min} \rho^{(t)}$ is the rate of litter mineralization to SOM, where $\rho^{(t)}$ is a function of daily and monthly average temperature and precipitation values:
+			\begin{align}
+				\rho^{(t)} = e^{\Theta\qty(T^{(t)} - \overline{T})}\qty(\qty(\frac{P^{(t)}}{\overline{P}}-1)s_p+1)
+			\end{align}
+			Here $\Theta$ and $s_p$ are heterotrophic temperature and precipitation dependence factors, $\overline{T}$ and $\overline{P}$ are long term running averages of temperature and precipitation, and $T^{(t)}$ and $P^{(t)}$ are the average temperature and precipitation on day $t$.
+
+			A constant proportion $f_\text{auto}$ of GPP is lost due to autotrophic respiration.  $f_\text{lab}$, $f_\text{fol}$, $f_\text{roo}$, and $f_\text{woo}$ are constant proportions of GPP allocated to the labile, foliar, fine root, and wood Carbon pools.  The sum of these proportions is equal to 1: $f_\text{lab} + f_\text{fol} + f_\text{roo} + f_\text{woo} + f_\text{auto} = 1$.
+
+			$\phi_\text{onset}^{(t)}$ and $\phi_\text{fall}^{(t)}$ are phenological functions describing the rates of labile to foliar and foliar to litter pool transfer on day $t$:
+			\begin{align}
+				\phi_\text{onset}^{(t)} &= \frac{\sqrt{2}}{\sqrt{\pi}}\times\qty(\frac{-\log(1-c_\text{lr})}{c_\text{ronset}})\times\exp[-\qty(\frac{s\sqrt{2}}{c_\text{ronset}}\sin\qty(\frac{t-d_\text{onset}-0.6245c_\text{ronset}}{s}))^2],\\
+				\phi_\text{fall}^{(t)} &= \frac{\sqrt{2}}{\sqrt{\pi}}\times\qty(\frac{-\log(1-c_\text{ll})}{c_\text{rfall}})\times\exp[-\qty(\frac{s\sqrt{2}}{c_\text{rfall}}\sin\qty(\frac{t - d_\text{fall} - \psi_f}{s}))^2].
+			\end{align}
+			Here $c_\text{ronset}$ and $c_\text{rfall}$ are the labile release and leaf fall periods, $d_\text{onset}$ and $d_\text{fall}$ are the leaf onset and fall days, $c_\text{lr}$ and $c_\text{ll}$ are the annual labile C release and leaf loss fractions, respectively, and $s = \frac{365.25}{\pi}$.  $\psi_f$ is the solution to a transcendental equation discussed {\color{red}in another document}.
+
+		\subsection{Fire Dynamics}
+			Denote $\qty[C_\text{lab}^{(t+1)}, C_\text{fol}^{(t+1)}, C_\text{roo}^{(t+1)}, C_\text{woo}^{(t+1)}, C_\text{lit}^{(t+1)}, C_\text{som}^{(t+1)}] = \vec{C}^{(t+1)} = \text{DALEC}_{813}^\text{fire}(\vec{C}^{(t+1)'})$.  The fire dynamics are given by
+			\begin{align}
+				C_i^{(t+1)} = C_i^{(t+1)'} - FE_i^{(t)} - FM_i^{(t)},
+			\end{align}
+			for $i = \text{lab}, \text{fol}, \text{roo}, \text{woo}$, and
+			\begin{align}
+				C_\text{lit}^{(t+1)} &= C_\text{lit}^{(t+1)'}  - FE_\text{lit}^{(t)} + FM_\text{lab}^{(t)} + FM_\text{fol}^{(t)} + FM_\text{roo}^{(t)},\\
+				C_\text{som}^{(t+1)} &= C_\text{som}^{(t+1)'} - FM_\text{som}^{(t)} + FM_\text{woo}^{(t)}.
+			\end{align}
+			Here $FE_i^{(t)}$ and $FM_i^{(t)}$ are fire emission and fire mortality fluxes for pool $i$ on day $t$:
+			\begin{align}
+				FE_i^{(t)} &= C_i^{(t+1)'}BA^{(t)}k_i,\\
+				FM_i^{(t)} &= C_i^{(t+1)'}BA^{(t)}(1-k_i)r,
+			\end{align}
+			where $BA^{(t)}$ is the burned area on day $t$, $k_i$ are the combustion factors for pool $i$, and $r$ is the resilience factor.
+
+		\subsection{Leaf Area Index}
+			Leaf Area Index (LAI) on day $t$ is proportional to the foliar pool on day $t$:
+			\begin{align}
+				\text{LAI}^{(t)} = \frac{C_\text{fol}^{(t)}}{c_\text{lma}},
+			\end{align}
+			where $c_\text{lma}$ is the leaf Carbon mass per unit area (sq. m).
+
+	\section{Comparison to DALEC\_813.c}
+
+		\subsection{Dynamic State Variables}
+			\begin{align*}
+				\texttt{POOLS[p+0]} &= C_\text{lab}^{(t)} & \text{Eqn. (1) = Line 206}\\
+				\texttt{POOLS[p+1]} &= C_\text{fol}^{(t)} & \text{Eqn. (2) = Line 207}\\
+				\texttt{POOLS[p+2]} &= C_\text{roo}^{(t)} & \text{Eqn. (3) = Line 208}\\
+				\texttt{POOLS[p+3]} &= C_\text{woo}^{(t)} & \text{Eqn. (4) = Line 209}\\
+				\texttt{POOLS[p+4]} &= C_\text{lit}^{(t)} & \text{Eqn. (5) = Line 200}\\
+				\texttt{POOLS[p+5]} &= C_\text{som}^{(t)} & \text{Eqn. (6) = Line 208}\\
+				\texttt{POOLS[p+6]} &= W^{(t)} & \text{Eqn. (8) = Line 219}\\
+				\texttt{POOLS[nxp+0]} &= C_\text{lab}^{(t+1)'},\text{ then }C_\text{lab}^{(t+1)} & \text{Eqn. (14) = Line 236}\\
+				\texttt{POOLS[nxp+1]} &= C_\text{fol}^{(t+1)'},\text{ then }C_\text{fol}^{(t+1)}\\
+				\texttt{POOLS[nxp+2]} &= C_\text{roo}^{(t+1)'},\text{ then }C_\text{roo}^{(t+1)}\\
+				\texttt{POOLS[nxp+3]} &= C_\text{woo}^{(t+1)'},\text{ then }C_\text{woo}^{(t+1)}\\
+				\texttt{POOLS[nxp+4]} &= C_\text{lit}^{(t+1)'},\text{ then }C_\text{lit}^{(t+1)} & \text{Eqn. (15) = Line 239}\\
+				\texttt{POOLS[nxp+5]} &= C_\text{som}^{(t+1)'},\text{ then }C_\text{som}^{(t+1)} & \text{Eqn. (16) = Line 241}
+			\end{align*}
+
+		\subsection{Fluxes and Supporting Equations}
+			\begin{align*}
+				\texttt{FLUXES[f+0]} &= F_\text{gpp}^{(t)} & \text{Eqn. (7) = Line 169}\\
+				\texttt{FLUXES[f+3]} &= f_\text{fol}F_\text{gpp}^{(t)}\\
+				\texttt{FLUXES[f+4]} &= f_\text{lab}F_\text{gpp}^{(t)}\\
+				\texttt{FLUXES[f+5]} &= f_\text{roo}F_\text{gpp}^{(t)}\\
+				\texttt{FLUXES[f+6]} &= f_\text{woo}F_\text{gpp}^{(t)}\\
+				\texttt{FLUXES[f+7]} &= \phi_\text{onset}^{(t)}C_\text{lab}^{(t)}\\
+				\texttt{FLUXES[f+9]} &= \phi_\text{fall}^{(t)}C_\text{fol}^{(t)}\\
+				\texttt{FLUXES[f+10]} &= \phi_\text{fall}^{(t)}C_\text{fol}^{(t)}\\
+				\texttt{FLUXES[f+11]} &= \theta_\text{roo}C_\text{roo}^{(t)}\\
+				\texttt{FLUXES[f+12]} &= \theta_\text{lit}\rho^{(t)}C_\text{lit}^{(t)}\\
+				\texttt{FLUXES[f+13]} &= \theta_\text{som}\rho^{(t)}C_\text{lit}^{(t)}\\
+				\texttt{FLUXES[f+14]} &= \theta_\text{min}\rho^{(t)}C_\text{lit}^{(t)}\\
+				\texttt{FLUXES[f+1]} &= \rho^{(t)} & \text{Eqn (11) = Line 174}\\
+				\texttt{FLUXES[f+8]} &= \phi_\text{fall}^{(t)} & \text{Eqn (13) = Line 186}\\
+				\texttt{FLUXES[f+15]} &= \phi_\text{onset}^{(t)} & \text{Eqn (12) = Line 188}\\
+				\texttt{FLUXES[f+28]} &= ET^{(t)} & \text{Eqn. (9) = Line 171}\\
+				\texttt{FLUXES[f+29]} &= R^{(t)} & \text{Eqn. (10) = Lines 215, 217}\\
+				\texttt{FLUXES[f+17+nn]} &= FE_i^{(t)} & \text{Eqn. (17) = Line 231}\\
+				\texttt{FLUXES[f+13+nn]} &= FM_i^{(t)} & \text{Eqn. (18) = Line 232}\\
+				\texttt{LAI[n]} &= \text{LAI}^{(t)} & \text{Eqn. (19) = Line 157}
+			\end{align*}
+
+		\subsection{Parameters}
+			\begin{align*}
+				\texttt{pars[0]} &= \theta_\text{min}\\
+				\texttt{pars[1]} &= \text{\%GPP lost to autotrophic respiration ($f_\text{auto}$)}\\
+				\texttt{pars[2]} &= \text{\%NPP allocated to foliar pool}\\
+				&\qquad f_\text{fol} = (1-\texttt{pars[1]})\texttt{pars[2]}\\
+				\texttt{pars[12]} &= \text{\%(NPP not allocated to foliar pool) allocated to labile pool}\\
+				&\qquad f_\text{lab} = (1-\texttt{pars[1]})(1-\texttt{pars[2]})\texttt{pars[12]}\\
+				\texttt{pars[3]} &= \text{\%(NPP not allocated to foliar or labile pools) allocated to fine root pool}\\
+				&\qquad f_\text{roo} = (1-\texttt{pars[1]})(1-\texttt{pars[2]})(1-\texttt{pars[12]})\texttt{pars[3]}\\
+				&\qquad f_\text{woo} = (1-\texttt{pars[1]})(1-\texttt{pars[2]})(1-\texttt{pars[12]})(1-\texttt{pars[3]})\\
+				\texttt{pars[4]} &= \frac{1}{c_\text{ll}}\\
+				\texttt{pars[5]} &= \theta_\text{woo}\\
+				\texttt{pars[6]} &= \theta_\text{roo}\\
+				\texttt{pars[7]} &= \theta_\text{lit}\\
+				\texttt{pars[8]} &= \theta_\text{som}\\
+				\texttt{pars[9]} &= \Theta\\
+				\texttt{pars[10]} &= \text{one of the nitrogen constants in the ACM}\\
+				\texttt{pars[11]} &= d_\text{onset}\\
+				\texttt{pars[13]} &= c_\text{ronset}\\
+				\texttt{pars[14]} &= d_\text{fall}\\
+				\texttt{pars[15]} &= c_\text{rfall}\\
+				\texttt{pars[16]} &= c_\text{lma}\\
+				\texttt{pars[17]}\text{ through }\texttt{pars[22]} &= \qty[C_\text{lab}^{(0)},C_\text{fol}^{(0)},C_\text{roo}^{(0)},C_\text{woo}^{(0)},C_\text{lit}^{(0)},C_\text{som}^{(0)}]\text{ (initial condition)}\\
+				\texttt{pars[23]} &= v_e\\
+				\texttt{pars[24]} &= \frac{1}{\alpha}\\
+				\texttt{pars[25]} &= \omega\\
+				\texttt{pars[26]} &= W^{(0)}\text{ (initial condition)}\\
+				\texttt{pars[27]} &= k_\text{fol}\\
+				\texttt{pars[28]} &= k_\text{lab} = k_\text{roo} = f_\text{woo}\\
+				\texttt{pars[27]/2+pars[28]/2} &= k_\text{lit}\\
+				\texttt{pars[29]} &= k_\text{som}\\
+				\texttt{pars[30]} &= 1-r\\
+				\texttt{pars[31]} &= \frac{1}{c_\text{lr}}\\
+				\texttt{pars[32]} &= s_p
+			\end{align*}
+
+		\subsection{Meteorological Data and Other Inputs}
+			\begin{align*}
+				\texttt{DATA.MET[m+0]} &= t & \text{eqn. (12) and (13)}\\
+				\texttt{DATA.MET[m+1]} &= \text{min. temp on day $t$} & \text{ACM}\\
+				\texttt{DATA.MET[m+2]} &= \text{max. temp on day $t$} & \text{ACM}\\
+				\texttt{DATA.MET[m+2]*0.5+DATA.MET[m+1]*0.5} &= T^{(t)} & \text{eqn. (11)}\\
+				\texttt{DATA.MET[m+3]} &= \text{radiation} & \text{ACM}\\
+				\texttt{DATA.MET[m+4]} &= \text{CO}_2 & \text{ACM}\\
+				\texttt{DATA.MET[m+5]} &= \text{yearday} & \text{ACM}\\
+				\texttt{DATA.MET[m+6]} &= BA^{(t)} & \text{eqn. (17) and (18)}\\
+				\texttt{DATA.MET[m+7]} &= VPD^{(t)} & \text{eqn. (9)}\\
+				\texttt{DATA.MET[m+8]} &= P^{(t)} & \text{eqn. (8) and (11)}\\
+				\texttt{DATA.meantemp} &= \overline{T} & \text{eqn. (11)}\\
+				\texttt{DATA.meanprec} &= \overline{P} & \text{eqn. (11)}
+			\end{align*}
+
+
+\end{document}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
